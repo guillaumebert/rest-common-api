@@ -5,6 +5,8 @@ using Simple.OData.Client;
 using EdmxReader = Microsoft.Data.Edm.Csdl.EdmxReader;
 using System.Threading.Tasks;
 using NeotysAPIException = Neotys.CommonAPI.Error.NeotysAPIException;
+using System.Text.RegularExpressions;
+using Neotys.CommonAPI.Data;
 
 /*
  * Copyright (c) 2016, Neotys
@@ -97,6 +99,14 @@ namespace Neotys.CommonAPI.Client
             return WriteEntity(edm, url, entitySetName, properties);
         }
 
+        protected internal virtual BinaryData ReadBinary(string entitySetName, IDictionary<string, object> properties)
+        {
+            if (!enabled) {
+                return null;
+            }
+            return WriteBinary(edm, url, entitySetName, properties);
+        }
+
         protected internal virtual void CreateEntity(string entitySetName, IDictionary<string, object> properties)
         {
             if (!enabled)
@@ -170,6 +180,35 @@ namespace Neotys.CommonAPI.Client
                 }
                 throw e;
             }
+        }
+
+        private BinaryData WriteBinary(Edm edm, string absoluteUri, string entitySetName, IDictionary<string, object> data)
+        {
+            // TODO post data as json, read binary response and get the file name from header
+            byte[] result = new byte[2];
+            BinaryData returnValue = new BinaryData("toto", result);
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Extract the file name from the content disposition header:
+        /// EX: Content-Disposition : form-data; name="file"; filename="test_example.txt" </summary>
+        private static string ExtractFileNameFromContentDispositionHeader(string contentDispositionHeader)
+        {
+            if (contentDispositionHeader != null && contentDispositionHeader.Length != 0)
+            {
+                string pattern = "(?<=filename=\").*?(?=\")";
+                foreach (string arg in Environment.GetCommandLineArgs())
+                {
+                    MatchCollection matchCollection = Regex.Matches(contentDispositionHeader, pattern);
+                    if (matchCollection.Count > 0)
+                    {
+                        return matchCollection[0].Groups[1].Value;
+                    }
+                }
+            }
+            return "";
         }
 
         private void WaitForTaskToComplete(Task task)
