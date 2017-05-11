@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using NeotysAPIException = Neotys.CommonAPI.Error.NeotysAPIException;
 using System.Text.RegularExpressions;
 using Neotys.CommonAPI.Data;
+using System.Net;
+using System.IO;
+using System.Text;
 
 /*
  * Copyright (c) 2016, Neotys
@@ -28,6 +31,8 @@ namespace Neotys.CommonAPI.Client
 
         private const string Metadata = "$metadata";
         private const string Separator = "/";
+        private const String applicationJson = "application/json";
+        private const String methodPost = "POST";
 
         /// <summary>
         /// Use -Dnl.client.enabled=false to disable the interaction with the Rest API server.
@@ -99,12 +104,12 @@ namespace Neotys.CommonAPI.Client
             return WriteEntity(edm, url, entitySetName, properties);
         }
 
-        protected internal virtual BinaryData ReadBinary(string entitySetName, IDictionary<string, object> properties)
+        protected internal virtual BinaryData ReadBinary(string entitySetName, string apiKey, string jsonContent)
         {
             if (!enabled) {
                 return null;
             }
-            return WriteBinary(edm, url, entitySetName, properties);
+            return WriteBinary(edm, url, entitySetName, apiKey, jsonContent);
         }
 
         protected internal virtual void CreateEntity(string entitySetName, IDictionary<string, object> properties)
@@ -182,13 +187,55 @@ namespace Neotys.CommonAPI.Client
             }
         }
 
-        private BinaryData WriteBinary(Edm edm, string absoluteUri, string entitySetName, IDictionary<string, object> data)
+        private BinaryData WriteBinary(Edm edm, string url, string entitySetName, string apiKey, string jsonContent)
         {
-            // TODO post data as json, read binary response and get the file name from header
-            byte[] result = new byte[2];
-            BinaryData returnValue = new BinaryData("toto", result);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url + Separator + entitySetName));
+            // TODO https?
+            request.Method = methodPost;
+            request.ContentType = applicationJson;
 
-            return returnValue;
+            Stream postStream = request.GetRequestStream();
+
+            StringBuilder contentBuilder = new StringBuilder();
+            contentBuilder.Append(" { \"d\": { ").Append(jsonContent);
+            if (apiKey != null)
+            {
+                contentBuilder.Append(", \"ApiKey\": \"").Append(apiKey).Append("\"");
+            }
+            contentBuilder.Append("}}");
+
+            byte[] postBytes = Encoding.UTF8.GetBytes(contentBuilder.ToString());
+            postStream.Write(postBytes, 0, postBytes.Length);
+            postStream.Flush();
+            postStream.Close();
+
+            WebResponse response;
+            try
+            {
+                response = request.GetResponse();
+            }
+            catch(WebException exception)
+            {
+                byte[] error = ReadFully(exception.Response.GetResponseStream());
+                throw NeotysAPIException.Parse(Encoding.UTF8.GetString(error));
+            }
+
+            string fileName = ExtractFileNameFromContentDispositionHeader(response.Headers.Get("Content-Disposition"));
+            return new BinaryData(fileName, ReadFully(response.GetResponseStream()));
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
 
         /// <summary>
@@ -198,14 +245,11 @@ namespace Neotys.CommonAPI.Client
         {
             if (contentDispositionHeader != null && contentDispositionHeader.Length != 0)
             {
-                string pattern = "(?<=filename=\").*?(?=\")";
-                foreach (string arg in Environment.GetCommandLineArgs())
+                string pattern = "(?<=filename=\\\").*?(?=\\\")";
+                MatchCollection matchCollection = Regex.Matches(contentDispositionHeader, pattern);
+                if (matchCollection.Count > 0)
                 {
-                    MatchCollection matchCollection = Regex.Matches(contentDispositionHeader, pattern);
-                    if (matchCollection.Count > 0)
-                    {
-                        return matchCollection[0].Groups[1].Value;
-                    }
+                    return matchCollection[0].Groups[0].Value;
                 }
             }
             return "";
