@@ -190,7 +190,6 @@ namespace Neotys.CommonAPI.Client
         private BinaryData WriteBinary(Edm edm, string url, string entitySetName, string apiKey, string jsonContent)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url + Separator + entitySetName));
-            // TODO https?
             request.Method = methodPost;
             request.ContentType = applicationJson;
 
