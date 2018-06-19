@@ -32,6 +32,7 @@ namespace Neotys.CommonAPI.Error
             public static readonly ErrorType NL_DESIGN_ILLEGAL_STATE_FOR_OPERATION = new ErrorType("NL_DESIGN_ILLEGAL_STATE_FOR_OPERATION", InnerEnum.NL_DESIGN_ILLEGAL_STATE_FOR_OPERATION);
             public static readonly ErrorType NL_DESIGN_CANNOT_GET_RECORDER_SETTINGS = new ErrorType("NL_DESIGN_CANNOT_GET_RECORDER_SETTINGS", InnerEnum.NL_DESIGN_CANNOT_GET_RECORDER_SETTINGS);
             public static readonly ErrorType NL_DESIGN_CANNOT_GET_RECORDING_STATUS = new ErrorType("NL_DESIGN_CANNOT_GET_RECORDING_STATUS", InnerEnum.NL_DESIGN_CANNOT_GET_RECORDING_STATUS);
+            public static readonly ErrorType NL_DESIGN_CANNOT_START_SAP_RECORDING = new ErrorType("NL_DESIGN_CANNOT_START_SAP_RECORDING", InnerEnum.NL_DESIGN_CANNOT_START_SAP_RECORDING);
             public static readonly ErrorType NL_DESIGN_UNKNOWN_USER_PATH = new ErrorType("NL_DESIGN_UNKNOWN_USER_PATH", InnerEnum.NL_DESIGN_UNKNOWN_USER_PATH);
             public static readonly ErrorType NL_DESIGN_CANNOT_SAVE_PROJECT = new ErrorType("NL_DESIGN_CANNOT_SAVE_PROJECT", InnerEnum.NL_DESIGN_CANNOT_SAVE_PROJECT);
             public static readonly ErrorType NL_DESIGN_CANNOT_SAVE_AS_PROJECT = new ErrorType("NL_DESIGN_CANNOT_SAVE_AS_PROJECT", InnerEnum.NL_DESIGN_CANNOT_SAVE_AS_PROJECT);
@@ -64,6 +65,7 @@ namespace Neotys.CommonAPI.Error
                 valueList.Add(NL_DESIGN_ILLEGAL_STATE_FOR_OPERATION);
                 valueList.Add(NL_DESIGN_CANNOT_GET_RECORDER_SETTINGS);
                 valueList.Add(NL_DESIGN_CANNOT_GET_RECORDING_STATUS);
+                valueList.Add(NL_DESIGN_CANNOT_START_SAP_RECORDING);
                 valueList.Add(NL_DESIGN_UNKNOWN_USER_PATH);
                 valueList.Add(NL_DESIGN_CANNOT_SAVE_PROJECT);
                 valueList.Add(NL_DESIGN_CANNOT_SAVE_AS_PROJECT);
@@ -92,6 +94,7 @@ namespace Neotys.CommonAPI.Error
                 NL_DESIGN_ILLEGAL_STATE_FOR_OPERATION,
                 NL_DESIGN_CANNOT_GET_RECORDER_SETTINGS,
                 NL_DESIGN_CANNOT_GET_RECORDING_STATUS,
+                NL_DESIGN_CANNOT_START_SAP_RECORDING,
                 NL_DESIGN_UNKNOWN_USER_PATH,
                 NL_DESIGN_CANNOT_SAVE_PROJECT,
                 NL_DESIGN_CANNOT_SAVE_AS_PROJECT,
