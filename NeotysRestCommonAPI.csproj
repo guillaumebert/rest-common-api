@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="client\NeotysAPIClientOlingo.cs" />
     <Compile Include="data\BinaryData.cs" />
+    <Compile Include="data\QualityStatus.cs" />
     <Compile Include="error\NeotysAPIException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\EqualsBuilder.cs" />
