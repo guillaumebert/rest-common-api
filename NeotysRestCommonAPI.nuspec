@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.4.0</version>
+    <title>$title$</title>
+    <authors>Neotys</authors>
+    <owners>Neotys</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://www.neotys.fr/documents/legal/bsd-neotys.txt</licenseUrl>
+    <projectUrl>https://github.com/neotys-rd/rest-common-api</projectUrl>
+    <iconUrl>https://www.neotys.com/favicon-96x96.png</iconUrl>
+    <description>$description$</description>
+    <releaseNotes>Update to .NET Framework 4.7.1.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>NeoLoad Rest API Common</tags>
+    <dependencies>
+        <group targetFramework=".NETFramework4.7.1">
+		  <dependency id="Microsoft.Bcl" version="1.1.10" />
+		  <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+		  <dependency id="Microsoft.Data.OData" version="5.8.4" />
+		  <dependency id="Simple.OData.Client" version="5.11.1" />
+		</group>
+    </dependencies>
+  </metadata>
+</package>
