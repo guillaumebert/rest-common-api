@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="client\NeotysAPIClientOlingo.cs" />
+    <Compile Include="client\NeotysAPIClientJson.cs" />
     <Compile Include="data\BinaryData.cs" />
     <Compile Include="data\QualityStatus.cs" />
     <Compile Include="error\NeotysAPIException.cs" />
